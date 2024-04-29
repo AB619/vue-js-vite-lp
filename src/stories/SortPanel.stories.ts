@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
-import Header from './Header.vue';
+import SortPanel from './SortPanel.vue';
 
 const meta = {
-  title: 'Header',
-  component: Header,
+  title: 'Sort Panel',
+  component: SortPanel,
   tags: ['autodocs'],
   argTypes: {},
   args: {},
-} satisfies Meta<typeof Header>;
+} satisfies Meta<typeof SortPanel>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const HeaderControl: Story = {
+export const SortSection: Story = {
   args: {},
 };

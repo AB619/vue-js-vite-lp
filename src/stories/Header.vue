@@ -1,37 +1,137 @@
-<template>
-  <header>
-    <div class="storybook-header">
-      <div>
-        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-          <g fill="none" fill-rule="evenodd">
-            <path d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z" fill="#FFF" />
-            <path d="M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z" fill="#555AB9" />
-            <path d="M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z" fill="#91BAF8" />
-          </g>
-        </svg>
-        <h1>Acme</h1>
-      </div>
-      <div>
-        <span class="welcome" v-if="user">Welcome, <b>{{ user.name }}</b>!</span>
-        <my-button size="small" @click="$emit('logout')" label="Log out" v-if="user" />
-        <my-button size="small" @click="$emit('login')" label="Log in" v-if="!user" />
-        <my-button primary size="small" @click="$emit('createAccount')" label="Sign up" v-if="!user" />
-      </div>
-    </div>
-  </header>
-</template>
+<script>
+import { ref } from "vue";
 
-<script lang="ts" setup>
-import './header.css';
-import MyButton from './Button.vue';
+export default {
+    setup() {
+        const searchByTitle = ref(true);
 
-defineProps<{ user: { name: string } | null }>();
+        const searchHandler = (option) => {
+            if (option === "title") searchByTitle.value = true;
+            else if (option === "genre") searchByTitle.value = false;
+            else searchByTitle.value = true;
+        };
 
-defineEmits<{
-  (event: 'createAccount'): void;
-  (event: 'login'): void;
-  (event: 'logout'): void;
-}>();
-
+        return { searchByTitle, searchHandler };
+    },
+};
 </script>
 
+<template>
+    <div class="root">
+        <header>
+            <span class="header__text1">netflix</span>
+            <span>roulette</span>
+        </header>
+        <div class="panel">
+            <div class="searchlabel">FIND YOUR MOVIE</div>
+            <div class="searchbar">
+                <input />
+                <button>SEARCH</button>
+            </div>
+            <div class="searchby">
+                <div class="searchby__heading">SEARCH BY</div>
+                <div class="searchby__options">
+                    <p @click="searchHandler('title')" v-bind:class="{ 'searchby__selected': searchByTitle }">TITLE</p>
+                    <p @click="searchHandler('genre')" v-bind:class="{ 'searchby__selected': !searchByTitle }">GENRE</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.root {
+    background: url("../assets/background.jpg");
+    min-height: 400px;
+}
+
+header {
+    padding: 20px 60px;
+}
+
+header>span {
+    color: #f65261;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+}
+
+.header__text1 {
+    font-weight: 1000;
+}
+
+.panel {
+    margin: 40px 90px;
+}
+
+.panel > div {
+    margin: 30px;
+}
+
+.searchlabel {
+    color: #ffffff;
+    font-size: 45px;
+    letter-spacing: 0.04em;
+}
+
+.searchby {
+    display: flex;
+    gap: 25px;
+}
+
+.searchby__options {
+    display: flex;
+    cursor: pointer;
+}
+
+.searchby__heading {
+    color: #999999;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 5px 0px;
+}
+
+.searchby__options>p {
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 5px 35px;
+    background-color: #424242;
+    border-radius: 4px;
+}
+
+.searchby__options>.searchby__selected {
+    background-color: #f65261;
+}
+
+.searchbar {
+    display: flex;
+    height: 50px;
+}
+
+.searchbar > input {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 5;
+    font-size: 20px;
+    margin-right: 5px;
+    background-color: rgba(79, 77, 77, 0.336);
+    border: 1px solid rgba(79, 77, 77, 0.336);
+    border-radius: 3px;
+    color: #ffffff;
+    padding: 2px 10px;
+}
+
+.searchbar > button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    flex: 1;
+    margin-left: 5px;
+    background-color: #f65261;
+    border: 1px solid #f65261;
+    border-radius: 3px;
+    color: #ffffff;
+}
+</style>
