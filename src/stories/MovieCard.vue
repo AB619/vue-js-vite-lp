@@ -16,10 +16,10 @@ defineProps<{ movie: Movie }>()
 <template>
     <div class="card">
         <img 
-        class="card__img" :src="`${movie.poster}`" :alt="movie.name" />
+        class="card__img" :src="movie.poster" :alt="movie.name" />
         <div class="card__info">
-            <div class="card__info__name">{{ movie.name }}</div>
-            <div class="card__info__year">{{ movie.year }}</div>
+            <div>{{ movie.name }}</div>
+            <div class="card-info__year">{{ movie.year }}</div>
         </div>
         <div class="card__genre">{{ movie.genre }}</div>
     </div>
@@ -41,7 +41,7 @@ defineProps<{ movie: Movie }>()
     color: #999999;
 }
 
-.card__info__year {
+.card-info__year {
     border: 1px solid #999999;
     border-radius: 6px;
     padding: 1px 8px;
