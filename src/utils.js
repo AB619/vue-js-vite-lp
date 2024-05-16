@@ -3,9 +3,9 @@ import { onUnmounted, ref, computed } from 'vue';
 export const lazyloadDirective = {
   mounted(el, binding) {
     const imageUrl = binding.value;
-    
     const handleIntersection = (entries, observer) => {
       entries.forEach(entry => {
+        console.log(entry.isIntersecting);
         if (entry.isIntersecting) {
           const lazyImage = entry.target;
           lazyImage.src = imageUrl;
@@ -17,7 +17,7 @@ export const lazyloadDirective = {
     const options = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.1
+      threshold: 1
     };
 
     const observer = new IntersectionObserver(handleIntersection, options);
