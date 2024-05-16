@@ -24,7 +24,7 @@ defineProps<{ movies: Movie[] }>();
   <div class="movies">
     <div v-if="movies.length > 0" class="movies__list">
       <div v-for="(m, i) in movies" class="card" :key="i">
-        <img class="card__img" v-lazyload="m.poster" :alt="m.name" />
+        <img class="card__img" v-lazyload="m.poster" :alt="m.name"/>
         <div class="card__info">
           <div class="card__info__name">{{ m.name }}</div>
           <div class="card__info__year">{{ m.year }}</div>
@@ -64,6 +64,11 @@ defineProps<{ movies: Movie[] }>();
 .card {
   max-width: 300px;
   padding: 5px;
+}
+
+.card__img {
+  min-width: 300px; 
+  min-height: 450px;
 }
 
 .card__info {
