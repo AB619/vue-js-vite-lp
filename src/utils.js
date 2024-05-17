@@ -21,10 +21,6 @@ export const lazyloadDirective = {
 
     const observer = new IntersectionObserver(handleIntersection, options);
     observer.observe(el);
-
-    onUnmounted(() => {
-      observer.disconnect();
-    });
   }
 };
 

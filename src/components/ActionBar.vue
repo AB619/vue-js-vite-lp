@@ -1,28 +1,39 @@
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import useMovieStore from "../store/movieStore";
 
 export default {
     setup() {
+        const movieStore = useMovieStore();
+        
         const sortByDate = ref(true);
 
+        const moviesCount = computed(() => {
+            if(movieStore.list){
+                return movieStore.list.length;
+            }
+            else return 0; 
+        });
+
         const sortHandler = (option) => {
-            if(option === "releaseDate") sortByDate.value = true;
+            if(option === "year") sortByDate.value = true;
             else if(option === "rating") sortByDate.value = false;
             else sortByDate.value = true;
+            movieStore.setSortByParam(option);
         };
 
-        return { sortByDate, sortHandler };
+        return { sortByDate, sortHandler, moviesCount }
     },
 };
 </script>
 
 <template>
     <div class="panel">
-        <div class="panel__moviesCount">6 movies found</div>
+        <div class="panel__moviesCount">{{ moviesCount }} movies found</div>
         <div class="panel__sort">
             <div class="panel__sort__heading">SORT BY</div>
             <div class="panel__sort__options">
-                <p @click="sortHandler('releaseDate')" v-bind:class="{'panel__sort__selected': sortByDate}">RELEASE DATE</p>
+                <p @click="sortHandler('year')" v-bind:class="{'panel__sort__selected': sortByDate}">RELEASE DATE</p>
                 <p @click="sortHandler('rating')" v-bind:class="{'panel__sort__selected': !sortByDate}">RATING</p>
             </div>
         </div>

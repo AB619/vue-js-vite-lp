@@ -1,17 +1,21 @@
 <script>
 import { ref } from "vue";
+import useMovieStore from "../store/movieStore";
 
 export default {
   setup() {
+    const movieStore = useMovieStore();
+
     const searchByTitle = ref(true);
 
     const searchHandler = (option) => {
       if (option === "title") searchByTitle.value = true;
       else if (option === "genre") searchByTitle.value = false;
       else searchByTitle.value = true;
+      movieStore.setSearchByParam(option);
     };
 
-    return { searchByTitle, searchHandler };
+    return { searchByTitle, searchHandler }
   },
 };
 </script>

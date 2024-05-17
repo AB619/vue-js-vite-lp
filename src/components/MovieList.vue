@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { defineProps, getCurrentInstance } from "vue";
+import { computed, getCurrentInstance } from "vue";
 import { lazyloadDirective } from '../utils.js';
+import useMovieStore from "../store/movieStore";
+
+const movieStore = useMovieStore();
+const movies = computed(() => movieStore.list);
 
 const instance = getCurrentInstance();
 if(instance){
@@ -8,22 +12,12 @@ if(instance){
   app?.directive('lazyload', lazyloadDirective);
 }
 
-interface Movie {
-  name: string;
-  genre: string;
-  year: number;
-  rating: number;
-  movieLength: number;
-  description: string;
-  poster: string;
-}
-defineProps<{ movies: Movie[] }>();
 </script>
 
 <template>
   <div class="movies">
-    <div v-if="movies.length > 0" class="movies__list">
-      <div v-for="(m, i) in movies" class="card" :key="i">
+    <div v-if="movies" class="movies__list">
+      <div v-for="(m, i) in movies" class="card" :key="m.name+i">
         <img class="card__img" v-lazyload="m.poster" :alt="m.name"/>
         <div class="card__info">
           <div class="card__info__name">{{ m.name }}</div>
