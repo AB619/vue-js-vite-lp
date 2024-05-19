@@ -1,10 +1,11 @@
-import { onUnmounted, ref, computed } from 'vue';
+import { ref, computed } from 'vue';
+import { IMockMovie } from './mockedData/mockedData';
 
 export const lazyloadDirective = {
-  mounted(el, binding) {
+  mounted(el: Element, binding: any) {
     const imageUrl = binding.value;
-    const handleIntersection = (entries, observer) => {
-      entries.forEach(entry => {
+    const handleIntersection = (entries: { isIntersecting: any; target: any; }[], observer: { unobserve: (arg0: any) => void; }) => {
+      entries.forEach((entry: { isIntersecting: any; target: any; }) => {
         if (entry.isIntersecting) {
           const lazyImage = entry.target;
           lazyImage.src = imageUrl;
@@ -24,17 +25,22 @@ export const lazyloadDirective = {
   }
 };
 
-export function useSearch(initialMovies) {
+export function useSearch(initialMovies: IMockMovie[]) {
   const searchQuery = ref('');
   const filteredMovies = ref(initialMovies);
+  const filterParam = ref('title');
 
-  const setSearchQuery = query => {
+  const setSearchQuery = (query: string) => {
     searchQuery.value = query.trim().toLowerCase();
   };
 
+  const setFilterParam = (param: string) => {
+    filterParam.value = param.trim().toLowerCase();
+  }
+
   const searchMovies = () => {
     filteredMovies.value = initialMovies.filter(movie =>
-      movie.title.toLowerCase().includes(searchQuery.value)
+      movie[filterParam.value].toString().toLowerCase().includes(searchQuery.value)
     );
   };
 
@@ -48,7 +54,9 @@ export function useSearch(initialMovies) {
 
   return {
     searchQuery,
+    filterParam,
     setSearchQuery,
+    setFilterParam,
     searchedMovies,
     searchMovies
   };

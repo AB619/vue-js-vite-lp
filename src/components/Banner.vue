@@ -1,50 +1,66 @@
-<script>
-import { ref } from "vue";
+<script setup>
+import { ref, computed } from "vue";
 import useMovieStore from "../store/movieStore";
 
-export default {
-  setup() {
-    const movieStore = useMovieStore();
+const movieStore = useMovieStore();
 
-    const searchByTitle = ref(true);
+const searchByTitle = ref(true);
+const query = ref('');
+const selectedMovie = computed(() => movieStore.getMovieById);
 
-    const searchHandler = (option) => {
-      if (option === "title") searchByTitle.value = true;
-      else if (option === "genre") searchByTitle.value = false;
-      else searchByTitle.value = true;
-      movieStore.setSearchByParam(option);
-    };
-
-    return { searchByTitle, searchHandler }
-  },
+const searchHandler = (option) => {
+  if (option === "title") searchByTitle.value = true;
+  else if (option === "genres") searchByTitle.value = false;
+  else searchByTitle.value = true;
+  movieStore.setFilterParam(option);
 };
+
+const clickHandler = () => {
+  movieStore.setSearchQuery(query.value);
+}
+
 </script>
 
 <template>
   <div class="root">
     <header>
-      <span class="header__text1">netflix</span>
-      <span>roulette</span>
+      <div class="header__left">
+        <span class="header__text1">netflix</span>
+        <span>roulette</span>
+      </div>
+      <div v-if="movieStore.isMovieDetailOpen" class="header__right">
+        <img src="../assets/search.svg" @click="movieStore.toggleMovieDetailPanel(null)">
+      </div>
     </header>
-    <div class="panel">
+    <div v-if="movieStore.isMovieDetailOpen" class="banner">
+      <img class="banner-img"
+        :src="selectedMovie.posterurl"
+        :placeholder="selectedMovie.title" />
+      <div class="banner-info">
+        <div>
+          <span>{{ selectedMovie.title }}</span>
+          <span class="banner-info__rating">{{ selectedMovie.imdbRating }}</span>
+        </div>
+        <div class="banner-info__year">
+          <span>{{ selectedMovie.year }}</span>
+          <span>{{ selectedMovie.duration.slice(2).replace('M', '') }} min</span>
+        </div>
+        <div class="banner-info__storyline">{{ selectedMovie.storyline }}</div>
+      </div>
+    </div>
+    <div v-else class="panel">
       <div class="searchlabel">FIND YOUR MOVIE</div>
       <div class="searchbar">
-        <input />
-        <button>SEARCH</button>
+        <input v-model="query" placeholder="Type and Search" />
+        <button @click="clickHandler()">SEARCH</button>
       </div>
       <div class="searchby">
         <div class="searchby__heading">SEARCH BY</div>
         <div class="searchby__options">
-          <p
-            @click="searchHandler('title')"
-            v-bind:class="{ searchby__selected: searchByTitle }"
-          >
+          <p @click="searchHandler('title')" v-bind:class="{ searchby__selected: searchByTitle }">
             TITLE
           </p>
-          <p
-            @click="searchHandler('genre')"
-            v-bind:class="{ searchby__selected: !searchByTitle }"
-          >
+          <p @click="searchHandler('genres')" v-bind:class="{ searchby__selected: !searchByTitle }">
             GENRE
           </p>
         </div>
@@ -61,9 +77,11 @@ export default {
 
 header {
   padding: 20px 60px;
+  display: flex;
+  justify-content: space-between;
 }
 
-header > span {
+.header__left {
   color: #f65261;
   font-size: 20px;
   letter-spacing: 0.04em;
@@ -73,11 +91,50 @@ header > span {
   font-weight: 1000;
 }
 
+.banner {
+  display: flex;
+  margin: 0 90px;
+  align-items: center;
+}
+
+.banner-img {
+  flex: 1;
+  height: 450px;
+  width: 300px;
+  margin: 30px;
+}
+
+.banner-info {
+  flex: 3;
+  color: #ffffff;
+  font-size: 45px;
+  letter-spacing: 0.04em;
+}
+
+.banner-info__rating {
+  color: #a1e66f;
+  border: 1px solid #ffffff;
+  padding: 5px;
+  border-radius: 50px;
+  margin: 20px;
+}
+
+.banner-info__year>span {
+  color: #f65261;
+  margin-right: 30px;
+  font-size: 35px;
+}
+
+.banner-info__storyline {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
 .panel {
   margin: 40px 90px;
 }
 
-.panel > div {
+.panel>div {
   margin: 30px;
 }
 
@@ -104,7 +161,7 @@ header > span {
   padding: 5px 0px;
 }
 
-.searchby__options > p {
+.searchby__options>p {
   color: #ffffff;
   font-weight: 600;
   letter-spacing: 1px;
@@ -113,7 +170,7 @@ header > span {
   border-radius: 4px;
 }
 
-.searchby__options > .searchby__selected {
+.searchby__options>.searchby__selected {
   background-color: #f65261;
 }
 
@@ -122,7 +179,7 @@ header > span {
   height: 50px;
 }
 
-.searchbar > input {
+.searchbar>input {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -136,7 +193,7 @@ header > span {
   padding: 2px 10px;
 }
 
-.searchbar > button {
+.searchbar>button {
   display: flex;
   justify-content: center;
   align-items: center;

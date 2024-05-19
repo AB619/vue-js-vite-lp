@@ -1,40 +1,36 @@
-<script>
+<script setup>
 import { ref, computed } from "vue";
 import useMovieStore from "../store/movieStore";
 
-export default {
-    setup() {
-        const movieStore = useMovieStore();
-        
-        const sortByDate = ref(true);
+const movieStore = useMovieStore();
 
-        const moviesCount = computed(() => {
-            if(movieStore.list){
-                return movieStore.list.length;
-            }
-            else return 0; 
-        });
+const sortByDate = ref(true);
 
-        const sortHandler = (option) => {
-            if(option === "year") sortByDate.value = true;
-            else if(option === "rating") sortByDate.value = false;
-            else sortByDate.value = true;
-            movieStore.setSortByParam(option);
-        };
+const moviesCount = computed(() => {
+    if (movieStore.list) {
+        return movieStore.list.length;
+    }
+    else return 0;
+});
 
-        return { sortByDate, sortHandler, moviesCount }
-    },
+const sortHandler = (option) => {
+    if (option === "releaseDate") sortByDate.value = true;
+    else if (option === "imdbRating") sortByDate.value = false;
+    else sortByDate.value = true;
+    movieStore.setSortByParam(option);
 };
 </script>
 
 <template>
     <div class="panel">
-        <div class="panel__moviesCount">{{ moviesCount }} movies found</div>
-        <div class="panel__sort">
+        <div v-if="movieStore.isMovieDetailOpen" class="panel__moviesCount">Films by {{ movieStore.getMovieById.genres[0] }} genre</div>
+        <div v-else class="panel__moviesCount">{{ moviesCount.valueOf() }} movies found</div>
+        <div v-if="!movieStore.isMovieDetailOpen" class="panel__sort">
             <div class="panel__sort__heading">SORT BY</div>
             <div class="panel__sort__options">
-                <p @click="sortHandler('year')" v-bind:class="{'panel__sort__selected': sortByDate}">RELEASE DATE</p>
-                <p @click="sortHandler('rating')" v-bind:class="{'panel__sort__selected': !sortByDate}">RATING</p>
+                <p @click="sortHandler('releaseDate')" v-bind:class="{ 'panel__sort__selected': sortByDate }">RELEASE DATE
+                </p>
+                <p @click="sortHandler('imdbRating')" v-bind:class="{ 'panel__sort__selected': !sortByDate }">RATING</p>
             </div>
         </div>
     </div>

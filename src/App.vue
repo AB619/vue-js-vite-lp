@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import HelloWorld from './components/Home.vue'
+import MovieList from "./components/MovieList.vue";
+import Footer from "./components/Footer.vue";
+import ActionBar from "./components/ActionBar.vue";
+import Banner from "./components/Banner.vue";
 </script>
 
 <template>
-  <HelloWorld />
+  <Banner />
+  <ActionBar />
+  <MovieList />
+  <Footer />
 </template>
-
-<style scoped>
-</style>

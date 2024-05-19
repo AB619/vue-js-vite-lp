@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance } from "vue";
-import { lazyloadDirective } from '../utils.js';
+import { lazyloadDirective } from '../utils.ts';
 import useMovieStore from "../store/movieStore";
 
 const movieStore = useMovieStore();
@@ -9,7 +9,7 @@ const movies = computed(() => movieStore.list);
 const instance = getCurrentInstance();
 if(instance){
   const app = instance.appContext.app;
-  app?.directive('lazyload', lazyloadDirective);
+  if(!app.directive('lazyload'))app?.directive('lazyload', lazyloadDirective);
 }
 
 </script>
@@ -17,13 +17,13 @@ if(instance){
 <template>
   <div class="movies">
     <div v-if="movies" class="movies__list">
-      <div v-for="(m, i) in movies" class="card" :key="m.name+i">
-        <img class="card__img" v-lazyload="m.poster" :alt="m.name"/>
+      <div v-for="(m) in movies" class="card" :key="m.id" @click="movieStore.toggleMovieDetailPanel(m.id)">
+        <img class="card__img" v-lazyload="m.posterurl" :alt="m.title"/>
         <div class="card__info">
-          <div class="card__info__name">{{ m.name }}</div>
+          <div class="card__info__name">{{ m.title }}</div>
           <div class="card__info__year">{{ m.year }}</div>
         </div>
-        <div class="card__genre">{{ m.genre }}</div>
+        <div class="card__genre">{{ m.genres.toString() }}</div>
       </div>
     </div>
 
@@ -56,13 +56,13 @@ if(instance){
 }
 
 .card {
-  max-width: 300px;
+  width: 300px;
   padding: 5px;
 }
 
 .card__img {
-  min-width: 300px; 
-  min-height: 450px;
+  width: 300px; 
+  height: 450px;
 }
 
 .card__info {
