@@ -16,7 +16,7 @@ if(instance){
 
 <template>
   <div class="movies">
-    <div v-if="movies" class="movies__list">
+    <div v-if="movies.length > 1" class="movies__list">
       <div v-for="(m) in movies" class="card" :key="m.id" @click="movieStore.toggleMovieDetailPanel(m.id)">
         <img class="card__img" v-lazyload="m.posterurl" :alt="m.title"/>
         <div class="card__info">

@@ -10,8 +10,7 @@ const selectedMovie = computed(() => movieStore.getMovieById);
 
 const searchHandler = (option) => {
   if (option === "title") searchByTitle.value = true;
-  else if (option === "genres") searchByTitle.value = false;
-  else searchByTitle.value = true;
+  else searchByTitle.value = false;
   movieStore.setFilterParam(option);
 };
 
@@ -51,16 +50,16 @@ const clickHandler = () => {
     <div v-else class="panel">
       <div class="searchlabel">FIND YOUR MOVIE</div>
       <div class="searchbar">
-        <input v-model="query" placeholder="Type and Search" />
+        <input type="text" v-model="query" placeholder="Type and Search" />
         <button @click="clickHandler()">SEARCH</button>
       </div>
       <div class="searchby">
         <div class="searchby__heading">SEARCH BY</div>
         <div class="searchby__options">
-          <p @click="searchHandler('title')" v-bind:class="{ searchby__selected: searchByTitle }">
+          <p class="title" @click="searchHandler('title')" v-bind:class="{ searchby__selected: searchByTitle }">
             TITLE
           </p>
-          <p @click="searchHandler('genres')" v-bind:class="{ searchby__selected: !searchByTitle }">
+          <p class="genres" @click="searchHandler('genres')" v-bind:class="{ searchby__selected: !searchByTitle }">
             GENRE
           </p>
         </div>

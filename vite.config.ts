@@ -8,7 +8,9 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     coverage: {
-      provider: 'v8'
-    }
+      provider: 'v8',
+      exclude: ['src/main.ts', '**/stories/**', '**/node_modules/**', '**/dist/**', '**/cypress/**', '**/.{idea,git,cache,output,temp,storybook}/**', '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*']
+
+    },
   },
 })
