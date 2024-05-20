@@ -15,8 +15,7 @@ const moviesCount = computed(() => {
 
 const sortHandler = (option) => {
     if (option === "releaseDate") sortByDate.value = true;
-    else if (option === "imdbRating") sortByDate.value = false;
-    else sortByDate.value = true;
+    else sortByDate.value = false;
     movieStore.setSortByParam(option);
 };
 </script>
@@ -28,9 +27,9 @@ const sortHandler = (option) => {
         <div v-if="!movieStore.isMovieDetailOpen" class="panel__sort">
             <div class="panel__sort__heading">SORT BY</div>
             <div class="panel__sort__options">
-                <p @click="sortHandler('releaseDate')" v-bind:class="{ 'panel__sort__selected': sortByDate }">RELEASE DATE
+                <p class="release-date" @click="sortHandler('releaseDate')" v-bind:class="{ 'panel__sort__selected': sortByDate }">RELEASE DATE
                 </p>
-                <p @click="sortHandler('imdbRating')" v-bind:class="{ 'panel__sort__selected': !sortByDate }">RATING</p>
+                <p class="rating" @click="sortHandler('imdbRating')" v-bind:class="{ 'panel__sort__selected': !sortByDate }">RATING</p>
             </div>
         </div>
     </div>

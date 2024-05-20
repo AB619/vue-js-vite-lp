@@ -43,7 +43,14 @@ const useMovieStore = defineStore(
 
             if (sortByParam.value) {
                 filteredList = filteredList.sort((a: IMockMovie, b: IMockMovie) => {
-                        return (a[sortByParam.value] as string).localeCompare(b[sortByParam.value] as string);
+                    const aValue = a[sortByParam.value];
+                    const bValue = b[sortByParam.value];
+
+                    if (typeof aValue === 'string' && typeof bValue === 'string') {
+                        return aValue.localeCompare(bValue);
+                    } else {
+                        return bValue - aValue;
+                    }
                 });
             }
 
