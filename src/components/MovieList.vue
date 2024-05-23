@@ -12,12 +12,16 @@ if(instance){
   if(!app.directive('lazyload'))app?.directive('lazyload', lazyloadDirective);
 }
 
+const clickHandler = (id: number) => {
+  movieStore.toggleMovieDetailPanel(id);
+}
+
 </script>
 
 <template>
   <div class="movies">
     <div v-if="movies.length > 1" class="movies__list">
-      <div v-for="(m) in movies" class="card" :key="m.id" @click="movieStore.toggleMovieDetailPanel(m.id)">
+      <div v-for="(m) in movies" class="card" :key="m.id" @click="clickHandler(m.id)">
         <img class="card__img" v-lazyload="m.posterurl" :alt="m.title"/>
         <div class="card__info">
           <div class="card__info__name">{{ m.title }}</div>
@@ -61,8 +65,9 @@ if(instance){
 }
 
 .card__img {
-  width: 300px; 
-  height: 450px;
+  min-width: 300px; 
+  min-height: 450px;
+  max-height: 450px;
 }
 
 .card__info {

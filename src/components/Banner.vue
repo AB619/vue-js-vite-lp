@@ -4,13 +4,10 @@ import useMovieStore from "../store/movieStore";
 
 const movieStore = useMovieStore();
 
-const searchByTitle = ref(true);
 const query = ref('');
-const selectedMovie = computed(() => movieStore.getMovieById);
+const selectedMovie = computed(() => movieStore.selectedMovie);
 
 const searchHandler = (option) => {
-  if (option === "title") searchByTitle.value = true;
-  else searchByTitle.value = false;
   movieStore.setFilterParam(option);
 };
 
@@ -34,7 +31,7 @@ const clickHandler = () => {
     <div v-if="movieStore.isMovieDetailOpen" class="banner">
       <img class="banner-img"
         :src="selectedMovie.posterurl"
-        :placeholder="selectedMovie.title" />
+        :alt="selectedMovie.title" />
       <div class="banner-info">
         <div>
           <span>{{ selectedMovie.title }}</span>
@@ -49,17 +46,17 @@ const clickHandler = () => {
     </div>
     <div v-else class="panel">
       <div class="searchlabel">FIND YOUR MOVIE</div>
-      <div class="searchbar">
-        <input type="text" v-model="query" placeholder="Type and Search" />
-        <button @click="clickHandler()">SEARCH</button>
-      </div>
+      <form class="searchbar" @submit.prevent="clickHandler()">
+        <input v-model="query" placeholder="Type and Search" />
+        <button type="submit">SEARCH</button>
+      </form>
       <div class="searchby">
         <div class="searchby__heading">SEARCH BY</div>
         <div class="searchby__options">
-          <p class="title" @click="searchHandler('title')" v-bind:class="{ searchby__selected: searchByTitle }">
+          <p @click="searchHandler('title')" :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
             TITLE
           </p>
-          <p class="genres" @click="searchHandler('genres')" v-bind:class="{ searchby__selected: !searchByTitle }">
+          <p @click="searchHandler('genres')" :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
             GENRE
           </p>
         </div>
@@ -169,7 +166,7 @@ header {
   border-radius: 4px;
 }
 
-.searchby__options>.searchby__selected {
+.searchby__options>.searchby--selected {
   background-color: #f65261;
 }
 
