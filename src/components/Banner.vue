@@ -47,16 +47,16 @@ const clickHandler = () => {
     <div v-else class="panel">
       <div class="searchlabel">FIND YOUR MOVIE</div>
       <form class="searchbar" @submit.prevent="clickHandler()">
-        <input v-model="query" placeholder="Type and Search" />
+        <input type="text" v-model="query" placeholder="Type and Search" />
         <button type="submit">SEARCH</button>
       </form>
       <div class="searchby">
         <div class="searchby__heading">SEARCH BY</div>
         <div class="searchby__options">
-          <p @click="searchHandler('title')" :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
+          <p @click="searchHandler('title')" class="title" :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
             TITLE
           </p>
-          <p @click="searchHandler('genres')" :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
+          <p @click="searchHandler('genres')" class="genres" :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
             GENRE
           </p>
         </div>
@@ -157,7 +157,7 @@ header {
   padding: 5px 0px;
 }
 
-.searchby__options>p {
+.genres, .title {
   color: #ffffff;
   font-weight: 600;
   letter-spacing: 1px;
@@ -166,7 +166,7 @@ header {
   border-radius: 4px;
 }
 
-.searchby__options>.searchby--selected {
+.searchby--selected {
   background-color: #f65261;
 }
 

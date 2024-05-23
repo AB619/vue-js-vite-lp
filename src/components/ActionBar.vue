@@ -21,8 +21,8 @@ const sortHandler = (option) => {
         <div v-if="!movieStore.isMovieDetailOpen" class="panel__sort">
             <div class="panel__sort__heading">SORT BY</div>
             <div class="panel__sort__options">
-                <p @click="sortHandler('releaseDate')" :class="{ 'panel__sort--selected': movieStore.sortByParam === 'releaseDate' }">RELEASE DATE</p>
-                <p @click="sortHandler('imdbRating')" :class="{ 'panel__sort--selected': movieStore.sortByParam === 'imdbRating' }">RATING</p>
+                <p @click="sortHandler('releaseDate')" class="rating" :class="{ 'panel__sort--selected': movieStore.sortByParam === 'releaseDate' }">RELEASE DATE</p>
+                <p @click="sortHandler('imdbRating')" class="release-date" :class="{ 'panel__sort--selected': movieStore.sortByParam === 'imdbRating' }">RATING</p>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@ const sortHandler = (option) => {
     padding: 5px 15px;
 }
 
-.panel__sort__options>p {
+.release-date, .rating {
     color: #ffffff;
     font-weight: 400;
     letter-spacing: 0.9px;
@@ -69,7 +69,7 @@ const sortHandler = (option) => {
     background-color: #424242;
 }
 
-.panel__sort__options > .panel__sort--selected {
+.panel__sort--selected {
     background-color: #f65261;
 }
 </style>

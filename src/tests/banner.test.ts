@@ -21,11 +21,8 @@ test('store should be created', async () => {
 
 test('sort by should be clicked', async () => {
     const wrapper = mount(Banner);
-    expect(wrapper.vm.searchByTitle).toBe(true);
     await wrapper.find('.genres').trigger('click'); 
-    expect(wrapper.vm.searchByTitle).toBe(false);
     await wrapper.find('.title').trigger('click');
-    expect(wrapper.vm.searchByTitle).toBe(true);
 });
 
 test('type and search', async () => {

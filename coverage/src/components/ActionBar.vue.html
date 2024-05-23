@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.56% </span>
+                <span class="strong">98.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>80/82</span>
+                <span class='fraction'>74/75</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.72% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/11</span>
+                <span class='fraction'>7/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.56% </span>
+                <span class="strong">98.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>80/82</span>
+                <span class='fraction'>74/75</span>
             </div>
         
             
@@ -137,16 +137,7 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -154,13 +145,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -231,32 +217,25 @@ import useMovieStore from "../store/movieStore";
 &nbsp;
 const movieStore = useMovieStore();
 &nbsp;
-const sortByDate = ref(true);
-&nbsp;
 const moviesCount = computed(() =&gt; {
-    if (movieStore.list) {
-        return movieStore.list.length;
-    }
-<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >    else return 0;</span></span>
+    return movieStore.list?.length <span class="branch-0 cbranch-no" title="branch not covered" >|| 0;</span>
 });
 &nbsp;
 const sortHandler = (option) =&gt; {
-    if (option === "releaseDate") sortByDate.value = true;
-    else sortByDate.value = false;
     movieStore.setSortByParam(option);
 };
 &lt;/script&gt;
 &nbsp;
 &lt;template&gt;
     &lt;div class="panel"&gt;
-<span class="branch-0 cbranch-no" title="branch not covered" >        &lt;div v-if="movieStore.isMovieDetailOpen" class="panel__moviesCount"&gt;Films by {{ movieStore.getMovieById.genres[0] }} genre&lt;/div&gt;</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        &lt;div v-if="movieStore.isMovieDetailOpen" class="panel__moviesCount"&gt;Films by {{ movieStore.selectedMovie.genres[0] }} genre&lt;/div&gt;</span>
         &lt;div v-else class="panel__moviesCount"&gt;{{ moviesCount.valueOf() }} movies found&lt;/div&gt;
+        
         &lt;div v-if="!movieStore.isMovieDetailOpen" class="panel__sort"&gt;
             &lt;div class="panel__sort__heading"&gt;SORT BY&lt;/div&gt;
             &lt;div class="panel__sort__options"&gt;
-                &lt;p class="release-date" @click="sortHandler('releaseDate')" v-bind:class="{ 'panel__sort__selected': sortByDate }"&gt;RELEASE DATE
-                &lt;/p&gt;
-                &lt;p class="rating" @click="sortHandler('imdbRating')" v-bind:class="{ 'panel__sort__selected': !sortByDate }"&gt;RATING&lt;/p&gt;
+                &lt;p @click="sortHandler('releaseDate')" class="rating" :class="{ 'panel__sort--selected': movieStore.sortByParam === 'releaseDate' }"&gt;RELEASE DATE&lt;/p&gt;
+                &lt;p @click="sortHandler('imdbRating')" class="release-date" :class="{ 'panel__sort--selected': movieStore.sortByParam === 'imdbRating' }"&gt;RATING&lt;/p&gt;
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
@@ -295,7 +274,7 @@ const sortHandler = (option) =&gt; {
     padding: 5px 15px;
 }
 &nbsp;
-.panel__sort__options&gt;p {
+.release-date, .rating {
     color: #ffffff;
     font-weight: 400;
     letter-spacing: 0.9px;
@@ -303,7 +282,7 @@ const sortHandler = (option) =&gt; {
     background-color: #424242;
 }
 &nbsp;
-.panel__sort__options&gt;.panel__sort__selected {
+.panel__sort--selected {
     background-color: #f65261;
 }
 &lt;/style&gt;</pre></td></tr></table></pre>
@@ -313,7 +292,7 @@ const sortHandler = (option) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-20T11:13:10.304Z
+                at 2024-05-23T14:58:42.143Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
