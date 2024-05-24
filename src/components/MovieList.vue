@@ -20,7 +20,7 @@ const clickHandler = (id: number) => {
 
 <template>
   <div class="movies">
-    <div v-if="movies.length > 1" class="movies__list">
+    <div v-if="movies.length > 0" class="movies__list">
       <div v-for="(m) in movies" class="card" :key="m.id" @click="clickHandler(m.id)">
         <img class="card__img" v-lazyload="m.posterurl" :alt="m.title"/>
         <div class="card__info">

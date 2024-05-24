@@ -43,13 +43,12 @@ const useMovieStore = defineStore("movieStore", () => {
 
   const list = computed(() => {
     let filteredList: IMockMovie[] = [...initialList.value];
-    if (searchQuery) {
-      searchMovies();
+    if (searchQuery.value) {
       filteredList = searchedMovies.value as IMockMovie[];
     }
 
     if (sortByParam.value) {
-      filteredList = filteredList.sort((a: IMockMovie, b: IMockMovie) => {
+      filteredList.sort((a: IMockMovie, b: IMockMovie) => {
         const aValue = a[sortByParam.value];
         const bValue = b[sortByParam.value];
 
@@ -59,7 +58,6 @@ const useMovieStore = defineStore("movieStore", () => {
         return bValue - aValue;
       });
     }
-
     return filteredList;
   });
 
@@ -73,6 +71,7 @@ const useMovieStore = defineStore("movieStore", () => {
     setSearchQuery,
     toggleMovieDetailPanel,
     selectedMovie,
+    searchMovies
   };
 });
 

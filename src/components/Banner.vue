@@ -3,7 +3,6 @@ import { ref, computed } from "vue";
 import useMovieStore from "../store/movieStore";
 
 const movieStore = useMovieStore();
-
 const query = ref('');
 const selectedMovie = computed(() => movieStore.selectedMovie);
 
@@ -13,6 +12,7 @@ const searchHandler = (option) => {
 
 const clickHandler = () => {
   movieStore.setSearchQuery(query.value);
+  movieStore.searchMovies();
 }
 
 </script>

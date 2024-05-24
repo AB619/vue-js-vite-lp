@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.07% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>68/79</span>
+                <span class='fraction'>65/78</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/9</span>
+                <span class='fraction'>8/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.07% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>68/79</span>
+                <span class='fraction'>65/78</span>
             </div>
         
             
@@ -141,8 +141,7 @@
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -186,24 +185,23 @@
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">2423x</span>
-<span class="cline-any cline-yes">2423x</span>
-<span class="cline-any cline-yes">2423x</span>
-<span class="cline-any cline-yes">2423x</span>
-<span class="cline-any cline-yes">2032x</span>
-<span class="cline-any cline-yes">2032x</span>
-<span class="cline-any cline-yes">391x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">2717x</span>
+<span class="cline-any cline-yes">2717x</span>
+<span class="cline-any cline-yes">2717x</span>
+<span class="cline-any cline-yes">2717x</span>
+<span class="cline-any cline-yes">2442x</span>
+<span class="cline-any cline-yes">2442x</span>
+<span class="cline-any cline-yes">275x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
@@ -266,13 +264,12 @@ const useMovieStore = defineStore("movieStore", () =&gt; {
 &nbsp;
   const list = computed(() =&gt; {
     let filteredList: IMockMovie[] = [...initialList.value];
-    if (searchQuery) {
-      searchMovies();
-      filteredList = searchedMovies.value as IMockMovie[];
-    }
+    if (searchQuery.value) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >      filteredList = searchedMovies.value as IMockMovie[];</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
     if (sortByParam.value) {
-      filteredList = filteredList.sort((a: IMockMovie, b: IMockMovie) =&gt; {
+      filteredList.sort((a: IMockMovie, b: IMockMovie) =&gt; {
         const aValue = a[sortByParam.value];
         const bValue = b[sortByParam.value];
 &nbsp;
@@ -282,7 +279,6 @@ const useMovieStore = defineStore("movieStore", () =&gt; {
         return bValue - aValue;
       });
     }
-&nbsp;
     return filteredList;
   });
 &nbsp;
@@ -296,6 +292,7 @@ const useMovieStore = defineStore("movieStore", () =&gt; {
     setSearchQuery,
     toggleMovieDetailPanel,
     selectedMovie,
+    searchMovies
   };
 });
 &nbsp;
@@ -307,7 +304,7 @@ export default useMovieStore;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-23T14:58:42.143Z
+                at 2024-05-24T19:12:32.959Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
