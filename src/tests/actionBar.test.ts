@@ -22,9 +22,8 @@ test('store should be created', async () => {
 
 test('sort by should be clicked', async () => {
     const wrapper = mount(ActionBar);
-    expect(wrapper.vm.sortByDate).toBe(true);
-    await wrapper.find('.rating').trigger('click'); 
-    expect(wrapper.vm.sortByDate).toBe(false);
+    await wrapper.find('.rating').trigger('click');
+    expect (wrapper.get('.panel__sort--selected').text()).toContain('RATING');
     await wrapper.find('.release-date').trigger('click');
-    expect(wrapper.vm.sortByDate).toBe(true);
+    expect (wrapper.get('.panel__sort--selected').text()).toContain('RELEASE DATE');
 });
