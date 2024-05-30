@@ -1,5 +1,5 @@
-const apiClient = (endpoint, options = {}) => {
-  const baseURL = "https://git.epam.com";
+const apiClient = async (endpoint, options = {}) => {
+  const baseURL = "https://cetrix13.github.io";
   const headers = {
     "Content-Type": "application/json",
     ...options.headers,

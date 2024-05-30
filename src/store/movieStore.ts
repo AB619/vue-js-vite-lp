@@ -4,7 +4,7 @@ import { IMockMovie, mockMoviesList } from "../mockedData/mockedData.ts";
 import { useMovies, useSearch } from "../utils.ts";
 
 const useMovieStore = defineStore("movieStore", () => {
-  const initialList = ref(mockMoviesList);
+  const initialList = ref<IMockMovie[]>([]);
   const sortByParam = ref("releaseDate");
   const isMovieDetailOpen = ref<number | null>(null);
   const {
@@ -15,11 +15,11 @@ const useMovieStore = defineStore("movieStore", () => {
     setFilterParam,
     searchMovies,
   } = useSearch(initialList.value);
-
+  
   const fetchMovies = async () => {
     const { movies, error, getAllMovies } = useMovies();
     await getAllMovies();
-    if(error.value) initialList.value = [];
+    if(error.value) initialList.value = mockMoviesList;
     else initialList.value = movies.value;
 }
 

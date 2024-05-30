@@ -75,7 +75,7 @@ export function useMovies() {
 
   const getAllMovies = async () => {
     try {
-      const endpoint = "/ld-global-coordinators/js-programs/vuejs-gmp-coursebook/-/raw/b22dd01b2dbeb4d8f7d45b659b81f81787b1f1f9/static/movies.json";
+      const endpoint = "/movies.json";
       const response = await apiClient(endpoint);
       movies.value = response.movies;
     } catch (err) {
