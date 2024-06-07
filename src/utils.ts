@@ -79,8 +79,7 @@ export function useMovies() {
       const response = await apiClient(endpoint);
       movies.value = response.movies;
     } catch (err) {
-      error.value = "An error occurred while trying to fetch movies";
-      console.error(err);
+      error.value = `An error occurred while trying to fetch movies: ${err}`;
     }
   };
 

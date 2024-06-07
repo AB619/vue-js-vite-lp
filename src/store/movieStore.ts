@@ -18,9 +18,13 @@ const useMovieStore = defineStore("movieStore", () => {
   
   const fetchMovies = async () => {
     const { movies, error, getAllMovies } = useMovies();
-    await getAllMovies();
-    if(error.value) initialList.value = mockMoviesList;
-    else initialList.value = movies.value;
+    try{
+      await getAllMovies();
+      initialList.value = movies.value;
+    }catch{
+      initialList.value = [];
+      console.log(error.value);
+    }
 }
 
   const setSortByParam = (param: string) => {

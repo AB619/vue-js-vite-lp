@@ -1,7 +1,7 @@
 const apiClient = async (endpoint, options = {}) => {
   const baseURL = "https://cetrix13.github.io";
   const headers = {
-    "Content-Type": "application/json",
+    //"Content-Type": "application/json",
     ...options.headers,
   };
 
@@ -20,7 +20,7 @@ const apiClient = async (endpoint, options = {}) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Fetch error:", error);
+      throw new Error("Fetch error:", error);
     });
 };
 
