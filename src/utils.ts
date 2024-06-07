@@ -29,9 +29,9 @@ export const lazyloadDirective = {
   },
 };
 
-export function useSearch(initialMovies: IMockMovie[]) {
+export function useSearch(initialMovies: Ref<IMockMovie[]>) {
   const searchQuery = ref("");
-  const filteredMovies = ref(initialMovies);
+  const filteredMovies = ref(initialMovies.value);
   const filterParam = ref("title");
 
   const setSearchQuery = (query: string) => {
@@ -43,7 +43,7 @@ export function useSearch(initialMovies: IMockMovie[]) {
   };
 
   const searchMovies = () => {
-    filteredMovies.value = initialMovies.filter((movie) =>
+    filteredMovies.value = initialMovies.value.filter((movie) =>
       movie[filterParam.value]
         .toString()
         .toLowerCase()

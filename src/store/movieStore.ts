@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import { IMockMovie, mockMoviesList } from "../mockedData/mockedData.ts";
+import { IMockMovie } from "../mockedData/mockedData.ts";
 import { useMovies, useSearch } from "../utils.ts";
 
 const useMovieStore = defineStore("movieStore", () => {
@@ -14,18 +14,17 @@ const useMovieStore = defineStore("movieStore", () => {
     filterParam,
     setFilterParam,
     searchMovies,
-  } = useSearch(initialList.value);
-  
+  } = useSearch(initialList);
+
   const fetchMovies = async () => {
-    const { movies, error, getAllMovies } = useMovies();
-    try{
+    const { movies, getAllMovies } = useMovies();
+    try {
       await getAllMovies();
       initialList.value = movies.value;
-    }catch{
+    } catch {
       initialList.value = [];
-      console.log(error.value);
     }
-}
+  };
 
   const setSortByParam = (param: string) => {
     sortByParam.value = param;
@@ -46,7 +45,7 @@ const useMovieStore = defineStore("movieStore", () => {
       const movie = initialList.value.find(
         (movie: IMockMovie) => movie.id === isMovieDetailOpen.value
       );
-      if(movie)setSearchQuery(movie.genres[0]);
+      if (movie) setSearchQuery(movie.genres[0]);
       return movie;
     }
     return undefined;
@@ -83,7 +82,7 @@ const useMovieStore = defineStore("movieStore", () => {
     setSearchQuery,
     toggleMovieDetailPanel,
     selectedMovie,
-    searchMovies
+    searchMovies,
   };
 });
 
