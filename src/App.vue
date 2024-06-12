@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import MovieList from "./components/MovieList.vue";
-import Footer from "./components/Footer.vue";
-import ActionBar from "./components/ActionBar.vue";
-import Banner from "./components/Banner.vue";
+import { onMounted, ref } from "vue";
+import { RouterView } from "vue-router";
 import useMovieStore from "./store/movieStore";
 
 const movieStore = useMovieStore();
+const isLoading = ref(false);
 
-onMounted(() => {
-  movieStore.fetchMovies();
+onMounted(async () => {
+  isLoading.value = true;
+  await movieStore.fetchMovies();
+  isLoading.value = false;
 });
 </script>
 
 <template>
-  <Banner />
-  <ActionBar />
-  <MovieList />
-  <Footer />
+  <div v-if="isLoading">Loading...</div>
+  <RouterView v-else />
 </template>

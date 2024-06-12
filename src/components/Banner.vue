@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import useMovieStore from "../store/movieStore";
 
+const router = useRouter();
 const movieStore = useMovieStore();
 const query = ref('');
 const selectedMovie = computed(() => movieStore.selectedMovie);
@@ -15,6 +17,11 @@ const clickHandler = () => {
   movieStore.searchMovies();
 }
 
+const searchClickHandler = () => {
+  movieStore.toggleMovieDetailPanel(null);
+  router.push("/movies");
+}
+
 </script>
 
 <template>
@@ -25,7 +32,7 @@ const clickHandler = () => {
         <span>roulette</span>
       </div>
       <div v-if="movieStore.isMovieDetailOpen" class="header__right">
-        <img src="../assets/search.svg" @click="movieStore.toggleMovieDetailPanel(null)">
+        <img src="../assets/search.svg" @click="searchClickHandler">
       </div>
     </header>
     <div v-if="movieStore.isMovieDetailOpen" class="banner">
