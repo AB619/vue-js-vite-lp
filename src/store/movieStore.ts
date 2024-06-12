@@ -1,10 +1,10 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import { IMockMovie, mockMoviesList } from "../mockedData/mockedData.ts";
-import { useSearch } from "../utils.ts";
+import { IMockMovie } from "../mockedData/mockedData.ts";
+import { useMovies, useSearch } from "../utils.ts";
 
 const useMovieStore = defineStore("movieStore", () => {
-  const initialList = ref(mockMoviesList);
+  const initialList = ref<IMockMovie[]>([]);
   const sortByParam = ref("releaseDate");
   const isMovieDetailOpen = ref<number | null>(null);
   const {
@@ -14,7 +14,17 @@ const useMovieStore = defineStore("movieStore", () => {
     filterParam,
     setFilterParam,
     searchMovies,
-  } = useSearch(initialList.value);
+  } = useSearch(initialList);
+
+  const fetchMovies = async () => {
+    const { movies, getAllMovies } = useMovies();
+    try {
+      await getAllMovies();
+      initialList.value = movies.value;
+    } catch {
+      initialList.value = [];
+    }
+  };
 
   const setSortByParam = (param: string) => {
     sortByParam.value = param;
@@ -35,7 +45,7 @@ const useMovieStore = defineStore("movieStore", () => {
       const movie = initialList.value.find(
         (movie: IMockMovie) => movie.id === isMovieDetailOpen.value
       );
-      if(movie)setSearchQuery(movie.genres[0]);
+      if (movie) setSearchQuery(movie.genres[0]);
       return movie;
     }
     return undefined;
@@ -62,6 +72,7 @@ const useMovieStore = defineStore("movieStore", () => {
   });
 
   return {
+    fetchMovies,
     list,
     isMovieDetailOpen,
     sortByParam,
@@ -71,7 +82,7 @@ const useMovieStore = defineStore("movieStore", () => {
     setSearchQuery,
     toggleMovieDetailPanel,
     selectedMovie,
-    searchMovies
+    searchMovies,
   };
 });
 

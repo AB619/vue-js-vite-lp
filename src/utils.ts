@@ -1,11 +1,15 @@
-import { ref, computed } from 'vue';
-import { IMockMovie } from './mockedData/mockedData';
+import { ref, computed, Ref } from "vue";
+import { IMockMovie } from "./mockedData/mockedData";
+import apiClient from "./api";
 
 export const lazyloadDirective = {
   mounted(el: Element, binding: any) {
     const imageUrl = binding.value;
-    const handleIntersection = (entries: { isIntersecting: any; target: any; }[], observer: { unobserve: (arg0: any) => void; }) => {
-      entries.forEach((entry: { isIntersecting: any; target: any; }) => {
+    const handleIntersection = (
+      entries: { isIntersecting: any; target: any }[],
+      observer: { unobserve: (arg0: any) => void }
+    ) => {
+      entries.forEach((entry: { isIntersecting: any; target: any }) => {
         if (entry.isIntersecting) {
           const lazyImage = entry.target;
           lazyImage.src = imageUrl;
@@ -16,19 +20,19 @@ export const lazyloadDirective = {
 
     const options = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.1
+      rootMargin: "0px",
+      threshold: 0.1,
     };
 
     const observer = new IntersectionObserver(handleIntersection, options);
     observer.observe(el);
-  }
+  },
 };
 
-export function useSearch(initialMovies: IMockMovie[]) {
-  const searchQuery = ref('');
-  const filteredMovies = ref(initialMovies);
-  const filterParam = ref('title');
+export function useSearch(initialMovies: Ref<IMockMovie[]>) {
+  const searchQuery = ref("");
+  const filteredMovies = ref(initialMovies.value);
+  const filterParam = ref("title");
 
   const setSearchQuery = (query: string) => {
     searchQuery.value = query.trim().toLowerCase();
@@ -36,11 +40,14 @@ export function useSearch(initialMovies: IMockMovie[]) {
 
   const setFilterParam = (param: string) => {
     filterParam.value = param.trim().toLowerCase();
-  }
+  };
 
   const searchMovies = () => {
-    filteredMovies.value = initialMovies.filter(movie =>
-      movie[filterParam.value].toString().toLowerCase().includes(searchQuery.value)
+    filteredMovies.value = initialMovies.value.filter((movie) =>
+      movie[filterParam.value]
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.value)
     );
   };
 
@@ -58,6 +65,23 @@ export function useSearch(initialMovies: IMockMovie[]) {
     setSearchQuery,
     setFilterParam,
     searchedMovies,
-    searchMovies
+    searchMovies,
   };
+}
+
+export function useMovies() {
+  const movies: Ref<IMockMovie[]> = ref([]);
+  const error: Ref<string | null> = ref(null);
+
+  const getAllMovies = async () => {
+    try {
+      const endpoint = "/movies.json";
+      const response = await apiClient(endpoint);
+      movies.value = response.movies;
+    } catch (err) {
+      error.value = `An error occurred while trying to fetch movies: ${err}`;
+    }
+  };
+
+  return { movies, error, getAllMovies };
 }
