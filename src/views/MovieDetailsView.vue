@@ -1,18 +1,18 @@
 <script setup>
 import { computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import MovieList from "../components/MovieList.vue";
 import Footer from "../components/Footer.vue";
 import ActionBar from "../components/ActionBar.vue";
 import Banner from "../components/Banner.vue";
 import useMovieStore from "../store/movieStore";
 
-const router = useRouter();
+const route = useRoute();
 const movieStore = useMovieStore();
-const id = computed(() => router.params.id)
+const id = computed(() => route.params.id);
 
 onMounted(() => {
-    movieStore.toggleMovieDetailPanel(id);
+    movieStore.toggleMovieDetailPanel(Number(id.value));
 });
 </script>
 

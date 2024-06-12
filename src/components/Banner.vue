@@ -8,16 +8,22 @@ const movieStore = useMovieStore();
 const query = ref('');
 const selectedMovie = computed(() => movieStore.selectedMovie);
 
-const searchHandler = (option) => {
+const searchParamHandler = (option) => {
   movieStore.setFilterParam(option);
 };
 
-const clickHandler = () => {
+const searchClickHandler = () => {
+  router.push({
+    path: '.',
+    query: {
+      search: query.value === "" ? undefined : query.value
+    }
+  })
   movieStore.setSearchQuery(query.value);
   movieStore.searchMovies();
 }
 
-const searchClickHandler = () => {
+const prevIconClickHandler = () => {
   movieStore.toggleMovieDetailPanel(null);
   router.push("/movies");
 }
@@ -32,7 +38,7 @@ const searchClickHandler = () => {
         <span>roulette</span>
       </div>
       <div v-if="movieStore.isMovieDetailOpen" class="header__right">
-        <img src="../assets/search.svg" @click="searchClickHandler">
+        <img src="../assets/search.svg" @click="prevIconClickHandler">
       </div>
     </header>
     <div v-if="movieStore.isMovieDetailOpen" class="banner">
@@ -53,17 +59,17 @@ const searchClickHandler = () => {
     </div>
     <div v-else class="panel">
       <div class="searchlabel">FIND YOUR MOVIE</div>
-      <form class="searchbar" @submit.prevent="clickHandler()">
+      <form class="searchbar" @submit.prevent="searchClickHandler()">
         <input type="text" v-model="query" placeholder="Type and Search" />
         <button type="submit">SEARCH</button>
       </form>
       <div class="searchby">
         <div class="searchby__heading">SEARCH BY</div>
         <div class="searchby__options">
-          <p @click="searchHandler('title')" class="title" :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
+          <p @click="searchParamHandler('title')" class="title" :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
             TITLE
           </p>
-          <p @click="searchHandler('genres')" class="genres" :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
+          <p @click="searchParamHandler('genres')" class="genres" :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
             GENRE
           </p>
         </div>
