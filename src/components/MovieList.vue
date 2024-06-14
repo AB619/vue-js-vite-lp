@@ -12,16 +12,12 @@ if(instance){
   if(!app.directive('lazyload'))app?.directive('lazyload', lazyloadDirective);
 }
 
-const clickHandler = (id: number) => {
-  movieStore.toggleMovieDetailPanel(id);
-}
-
 </script>
 
 <template>
   <div class="movies">
     <div v-if="movies.length > 0" class="movies__list">
-      <RouterLink v-for="(m) in movies" class="card" :key="m.id" @click="clickHandler(m.id)" :to="`/movies/${m.id}`">
+      <RouterLink v-for="(m) in movies" class="card" :key="m.id" :to="{ name: 'movieDetails', params: { id: m.id}}">
         <img class="card__img" v-lazyload="m.posterurl" :alt="m.title"/>
         <div class="card__info">
           <div class="card__info__name">{{ m.title }}</div>

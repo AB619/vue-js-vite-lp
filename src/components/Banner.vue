@@ -23,11 +23,6 @@ const searchClickHandler = () => {
   movieStore.searchMovies();
 }
 
-const prevIconClickHandler = () => {
-  movieStore.toggleMovieDetailPanel(null);
-  router.push("/movies");
-}
-
 </script>
 
 <template>
@@ -38,13 +33,13 @@ const prevIconClickHandler = () => {
         <span>roulette</span>
       </div>
       <div v-if="movieStore.isMovieDetailOpen" class="header__right">
-        <img src="../assets/search.svg" @click="prevIconClickHandler">
+        <RouterLink :to="`/movies`">
+          <img src="../assets/search.svg" />
+        </RouterLink>
       </div>
     </header>
     <div v-if="movieStore.isMovieDetailOpen" class="banner">
-      <img class="banner-img"
-        :src="selectedMovie.posterurl"
-        :alt="selectedMovie.title" />
+      <img class="banner-img" :src="selectedMovie.posterurl" :alt="selectedMovie.title" />
       <div class="banner-info">
         <div>
           <span>{{ selectedMovie.title }}</span>
@@ -66,10 +61,12 @@ const prevIconClickHandler = () => {
       <div class="searchby">
         <div class="searchby__heading">SEARCH BY</div>
         <div class="searchby__options">
-          <p @click="searchParamHandler('title')" class="title" :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
+          <p @click="searchParamHandler('title')" class="title"
+            :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
             TITLE
           </p>
-          <p @click="searchParamHandler('genres')" class="genres" :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
+          <p @click="searchParamHandler('genres')" class="genres"
+            :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
             GENRE
           </p>
         </div>
@@ -170,7 +167,8 @@ header {
   padding: 5px 0px;
 }
 
-.genres, .title {
+.genres,
+.title {
   color: #ffffff;
   font-weight: 600;
   letter-spacing: 1px;
