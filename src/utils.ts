@@ -55,6 +55,7 @@ export function useSearch(initialMovies: Ref<IMockMovie[]>) {
     if (!searchQuery.value) {
       return initialMovies;
     } else {
+      searchMovies();
       return filteredMovies.value;
     }
   });

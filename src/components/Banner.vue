@@ -1,16 +1,24 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import useMovieStore from "../store/movieStore";
 
+const router = useRouter();
 const movieStore = useMovieStore();
 const query = ref('');
 const selectedMovie = computed(() => movieStore.selectedMovie);
 
-const searchHandler = (option) => {
+const searchParamHandler = (option) => {
   movieStore.setFilterParam(option);
 };
 
-const clickHandler = () => {
+const searchClickHandler = () => {
+  router.push({
+    path: '.',
+    query: {
+      search: query.value === "" ? undefined : query.value
+    }
+  })
   movieStore.setSearchQuery(query.value);
   movieStore.searchMovies();
 }
@@ -25,13 +33,13 @@ const clickHandler = () => {
         <span>roulette</span>
       </div>
       <div v-if="movieStore.isMovieDetailOpen" class="header__right">
-        <img src="../assets/search.svg" @click="movieStore.toggleMovieDetailPanel(null)">
+        <RouterLink :to="`/movies`">
+          <img src="../assets/search.svg" />
+        </RouterLink>
       </div>
     </header>
     <div v-if="movieStore.isMovieDetailOpen" class="banner">
-      <img class="banner-img"
-        :src="selectedMovie.posterurl"
-        :alt="selectedMovie.title" />
+      <img class="banner-img" :src="selectedMovie.posterurl" :alt="selectedMovie.title" />
       <div class="banner-info">
         <div>
           <span>{{ selectedMovie.title }}</span>
@@ -46,17 +54,19 @@ const clickHandler = () => {
     </div>
     <div v-else class="panel">
       <div class="searchlabel">FIND YOUR MOVIE</div>
-      <form class="searchbar" @submit.prevent="clickHandler()">
+      <form class="searchbar" @submit.prevent="searchClickHandler()">
         <input type="text" v-model="query" placeholder="Type and Search" />
         <button type="submit">SEARCH</button>
       </form>
       <div class="searchby">
         <div class="searchby__heading">SEARCH BY</div>
         <div class="searchby__options">
-          <p @click="searchHandler('title')" class="title" :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
+          <p @click="searchParamHandler('title')" class="title"
+            :class="{ 'searchby--selected': movieStore.filterParam === 'title' }">
             TITLE
           </p>
-          <p @click="searchHandler('genres')" class="genres" :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
+          <p @click="searchParamHandler('genres')" class="genres"
+            :class="{ 'searchby--selected': movieStore.filterParam === 'genres' }">
             GENRE
           </p>
         </div>
@@ -157,7 +167,8 @@ header {
   padding: 5px 0px;
 }
 
-.genres, .title {
+.genres,
+.title {
   color: #ffffff;
   font-weight: 600;
   letter-spacing: 1px;
