@@ -35,11 +35,11 @@
 
             <div class="form__field-wrapper">
                 <span class="form__field-label">Number of dependants</span>
-                <Field class="form__field" name="numberOfDependants" type="text" />
+                <Field class="form__field" name="numberOfDependants" type="number" v-model="numberOfDependants" />
                 <ErrorMessage name="numberOfDependants" class="form__field-error" />
             </div>
 
-            <div class="form__field-wrapper">
+            <div class="form__field-wrapper" v-if="childCareCostsVisible">
                 <span class="form__field-label">Child care cost</span>
                 <Field class="form__field" name="childCareCosts" type="text" />
                 <ErrorMessage name="childCareCosts" class="form__field-error" />
@@ -47,7 +47,7 @@
 
             <div class="form__field-wrapper">
                 <span class="form__field-label">Employment status</span>
-                <Field class="form__field" name="employmentStatus" as="select">
+                <Field class="form__field" name="employmentStatus" as="select" v-model="employmentStatus">
                     <option v-for="employmentStatus in employmentStatuses" :value="employmentStatus"
                         :key="employmentStatus">
                         {{ employmentStatus }}
@@ -56,7 +56,7 @@
                 <ErrorMessage name="employmentStatus" class="form__field-error" />
             </div>
 
-            <div class="form__field-wrapper">
+            <div class="form__field-wrapper" v-if="companyNameVisible">
                 <span class="form__field-label">Company name</span>
                 <Field class="form__field" name="companyName" type="text" />
                 <ErrorMessage name="companyName" class="form__field-error" />
@@ -79,9 +79,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import { object, string, date } from 'yup';
-
 
 const genders = ['Mr', 'Mrs', 'Miss', 'Ms']
 const employmentStatuses = ['Full time', 'Part time', 'Unemployed', 'Retired']
@@ -92,23 +92,40 @@ const mobilePhoneRegex =
 
 const userNameRegex = /^(?:[a-zA-Z][a-zA-Z\s\\.\-']{1,29})$/ // at least 2 characters, and can only include letters, apostrophes, hyphens and full stops
 
-// Must be min 18 years old
-const maxDate = new Date()
-maxDate.setFullYear(maxDate.getFullYear() - 18)
+const numberOfDependants = ref<number>();
+const childCareCostsVisible = computed(() => showChildCareCosts(numberOfDependants.value));
 
-// Must be max 100 years old
-const minDate = new Date()
-minDate.setFullYear(minDate.getFullYear() - 100)
+const employmentStatus = ref<string>('');
+const companyNameVisible = computed(() => showCompanyName(employmentStatus.value));
+
+const showChildCareCosts = (numberOfDependants: number | undefined = 0) => numberOfDependants > 0;
+const showCompanyName = (companyName: string) => companyName === 'Full time' || companyName === 'Part time';
+
+const maxDate = new Date();
+maxDate.setFullYear(maxDate.getFullYear() - 18);
+
+const minDate = new Date();
+minDate.setFullYear(minDate.getFullYear() - 100);
 
 const schema = object({
     firstName: string().required('First name is required').matches(userNameRegex, 'Invalid format'),
     lastName: string().required('Last name is required').matches(userNameRegex, 'Invalid format'),
-    gender: string().required('Gender is required'),
+    gender: string().required('Gender is required').oneOf(genders),
     birthDate: date().required('Birth date is required').min(minDate, 'Must be over 18 years old').max(maxDate, 'Must be under 100 years old'),
-    mobilePhone: string().required('Mobile Phone is required').matches(mobilePhoneRegex, 'Invalid format'),
-    numberOfDependants: string().matches(numberOnlyRegex, 'Invalid format'),
-    childCareCosts: string().matches(numberOnlyRegex, 'Invalid format'),
-    personalIncome: string().matches(numberOnlyRegex, 'Invalid format'),
+    mobilePhone: string().required('Mobile Phone is required').matches(mobilePhoneRegex, 'Invalid format. Should be Mobile Number.'),
+    numberOfDependants: string().matches(numberOnlyRegex, 'Invalid format. Should be number and greater than 0.'),
+    childCareCosts: string().when('numberOfDependants', {
+        is: showChildCareCosts,
+        then: (schema) => schema.required('Child care cost is required').matches(numberOnlyRegex, 'Invalid format. Should be number.').max(1000000, 'Must be below 1,000,000'),
+        otherwise: (schema) => schema
+    }),
+    employmentStatus: string().required('Employemnt status is required').oneOf(employmentStatuses),
+    companyName: string().when('employmentStatus', {
+        is: showCompanyName,
+        then: (schema) => schema.required('Company Name is required'),
+        otherwise: (schema) => schema
+    }),
+    personalIncome: string().matches(numberOnlyRegex, 'Invalid format. Should be number.').min(1000, 'Must be above 1000').max(1000000, 'Must be below 1,000,000'),
 })
 
 const apply = (values) => {
