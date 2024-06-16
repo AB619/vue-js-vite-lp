@@ -13,7 +13,9 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@vee-validate/yup": "^4.13.1",
     "pinia": "^2.1.7",
+    "vee-validate": "^4.13.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.3"
   },

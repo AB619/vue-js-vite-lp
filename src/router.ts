@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import FormView from "./views/FormView.vue";
 import MoviesView from "./views/MoviesView.vue";
 import MovieDetailsView from "./views/MovieDetailsView.vue";
 import NotFoundView from "./views/NotFoundView.vue";
@@ -8,7 +9,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/movies",
+      component: FormView,
     },
     {
       path: "/movies",
