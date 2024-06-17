@@ -7,11 +7,10 @@ import ActionBar from "../components/ActionBar.vue";
 import Banner from "../components/Banner.vue";
 import useMovieStore from "../store/movieStore";
 
-const route = useRoute();
-const movieStore = useMovieStore();
-const id = computed(() => route.params.id);
-
 onMounted(() => {
+    const route = useRoute();
+    const movieStore = useMovieStore();
+    const id = computed(() => route.params.id);
     movieStore.toggleMovieDetailPanel(Number(id.value));
 });
 </script>
