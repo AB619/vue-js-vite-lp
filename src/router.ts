@@ -5,7 +5,7 @@ import MovieDetailsView from "./views/MovieDetailsView.vue";
 import NotFoundView from "./views/NotFoundView.vue";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.VUE_APP_BASE_URL),
   routes: [
     {
       path: "/",
