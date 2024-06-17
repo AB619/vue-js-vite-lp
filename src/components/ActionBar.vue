@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import useMovieStore from "../store/movieStore";
 
 const movieStore = useMovieStore();
@@ -15,7 +15,7 @@ const sortHandler = (option) => {
 
 <template>
     <div class="panel">
-        <div v-if="movieStore.isMovieDetailOpen" class="panel__moviesCount">Films by {{ movieStore.selectedMovie.genres[0] }} genre</div>
+        <div v-if="movieStore.isMovieDetailOpen && movieStore.selectedMovie" class="panel__moviesCount">Films by {{ movieStore.selectedMovie.genres[0] }} genre</div>
         <div v-else class="panel__moviesCount">{{ moviesCount.valueOf() }} movies found</div>
         
         <div v-if="!movieStore.isMovieDetailOpen" class="panel__sort">

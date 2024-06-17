@@ -9,9 +9,9 @@ import useMovieStore from "../store/movieStore";
 
 const route = useRoute();
 const movieStore = useMovieStore();
-const id = computed(() => route.params.id);
 
 onMounted(() => {
+    const id = computed(() => route.params.id);
     movieStore.toggleMovieDetailPanel(Number(id.value));
 });
 </script>

@@ -17,7 +17,7 @@ if(instance){
 <template>
   <div class="movies">
     <div v-if="movies.length > 0" class="movies__list">
-      <RouterLink v-for="(m) in movies" class="card" :key="m.id" :to="{ name: 'movieDetails', params: { id: m.id}}">
+      <RouterLink v-for="(m) in movies" class="card" :key="m.id" @click="movieStore.toggleMovieDetailPanel(m.id)" :to="{ name: 'movieDetails', params: { id: m.id}}">
         <img class="card__img" v-lazyload="m.posterurl" :alt="m.title"/>
         <div class="card__info">
           <div class="card__info__name">{{ m.title }}</div>

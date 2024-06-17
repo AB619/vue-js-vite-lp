@@ -38,7 +38,7 @@ const searchClickHandler = () => {
         </RouterLink>
       </div>
     </header>
-    <div v-if="movieStore.isMovieDetailOpen" class="banner">
+    <div v-if="movieStore.isMovieDetailOpen && selectedMovie" class="banner">
       <img class="banner-img" :src="selectedMovie.posterurl" :alt="selectedMovie.title" />
       <div class="banner-info">
         <div>
