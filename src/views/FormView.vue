@@ -29,7 +29,7 @@
 
             <div class="form__field-wrapper">
                 <span class="form__field-label">Mobile phone</span>
-                <Field class="form__field" name="mobilePhone" type="text" placeholder="GB number like: 07111111111"/>
+                <Field class="form__field" name="mobilePhone" type="text" placeholder="GB number like: 07111111111" />
                 <ErrorMessage name="mobilePhone" class="form__field-error" />
             </div>
 
@@ -107,6 +107,11 @@ maxDate.setFullYear(maxDate.getFullYear() - 18);
 const minDate = new Date();
 minDate.setFullYear(minDate.getFullYear() - 100);
 
+const rangeValidator = (min: number, max: number) => (value: string | undefined) => {
+    const nValue = value ? +value : 0;
+    return nValue >= min && nValue <= max;
+}
+
 const schema = object({
     firstName: string().required('First name is required').matches(userNameRegex, 'Invalid format'),
     lastName: string().required('Last name is required').matches(userNameRegex, 'Invalid format'),
@@ -116,7 +121,12 @@ const schema = object({
     numberOfDependants: string().matches(numberOnlyRegex, 'Invalid format. Should be number and greater than 0.'),
     childCareCosts: string().when('numberOfDependants', {
         is: showChildCareCosts,
-        then: (schema) => schema.required('Child care cost is required').matches(numberOnlyRegex, 'Invalid format. Should be number.').max(1000000, 'Must be below 1,000,000'),
+        then: (schema) => schema.required('Child care cost is required').matches(numberOnlyRegex, 'Invalid format. Should be number.').test(
+            'isChildCareCostsWithinRange',
+            'Child care costs must be over 0 and under 1,000,000',
+            rangeValidator(1, 1000000)
+        )
+        ,
         otherwise: (schema) => schema
     }),
     employmentStatus: string().required('Employemnt status is required').oneOf(employmentStatuses),
@@ -125,7 +135,11 @@ const schema = object({
         then: (schema) => schema.required('Company Name is required'),
         otherwise: (schema) => schema
     }),
-    personalIncome: string().matches(numberOnlyRegex, 'Invalid format. Should be number.').min(1000, 'Must be above 1000').max(1000000, 'Must be below 1,000,000'),
+    personalIncome: string().matches(numberOnlyRegex, 'Invalid format. Should be number.').test(
+        'isPersnalIncomeWithinRange',
+        'Personal income must be over 1,000 and under 1,000,000',
+        rangeValidator(1000, 1000000)
+    )
 })
 
 const apply = (values) => {
