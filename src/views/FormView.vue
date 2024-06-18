@@ -23,13 +23,13 @@
 
             <div class="form__field-wrapper">
                 <span class="form__field-label">Birth date</span>
-                <Field class="form__field" name="birthDate" type="text" />
+                <Field class="form__field" name="birthDate" type="date" />
                 <ErrorMessage name="birthDate" class="form__field-error" />
             </div>
 
             <div class="form__field-wrapper">
                 <span class="form__field-label">Mobile phone</span>
-                <Field class="form__field" name="mobilePhone" type="text" />
+                <Field class="form__field" name="mobilePhone" type="text" placeholder="GB number like: 07111111111"/>
                 <ErrorMessage name="mobilePhone" class="form__field-error" />
             </div>
 
@@ -111,8 +111,8 @@ const schema = object({
     firstName: string().required('First name is required').matches(userNameRegex, 'Invalid format'),
     lastName: string().required('Last name is required').matches(userNameRegex, 'Invalid format'),
     gender: string().required('Gender is required').oneOf(genders),
-    birthDate: date().required('Birth date is required').min(minDate, 'Must be over 18 years old').max(maxDate, 'Must be under 100 years old'),
-    mobilePhone: string().required('Mobile Phone is required').matches(mobilePhoneRegex, 'Invalid format. Should be Mobile Number.'),
+    birthDate: date().required('Birth date is required').min(minDate, 'Must be under 100 years old').max(maxDate, 'Must be over 18 years old'),
+    mobilePhone: string().required('Mobile Phone is required').matches(mobilePhoneRegex, 'Invalid format. GB number like: 07111111111.'),
     numberOfDependants: string().matches(numberOnlyRegex, 'Invalid format. Should be number and greater than 0.'),
     childCareCosts: string().when('numberOfDependants', {
         is: showChildCareCosts,
